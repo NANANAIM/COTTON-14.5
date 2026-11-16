@@ -24,7 +24,36 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>3.3.0</version> </dependency>
+
+        <!-- Pruebas unitarias: JUnit 5 (Jupiter + Params), Mockito y AssertJ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.3.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
+    <build>
+        <!-- Las pruebas viven en la carpeta "tests" del proyecto backend -->
+        <testSourceDirectory>tests</testSourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!--
+                        Los servicios usan rutas relativas (src/main/resources/data/*.json).
+                        Ejecutar las pruebas en un directorio aislado evita que se
+                        modifiquen los datos reales del proyecto.
+                    -->
+                    <workingDirectory>${project.build.directory}/test-workdir</workingDirectory>
+                    <argLine>-XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
